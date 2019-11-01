@@ -2,11 +2,12 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from applicants.mailing import send_greeting_mail
-from applicants.serializers import LoginSerializer, RegistrationSerializer
+from applicants.serializers import LoginSerializer, RegistrationSerializer, ChangePasswordSerializer
 
 
 class LoginAPIView(APIView):
@@ -18,10 +19,10 @@ class LoginAPIView(APIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
 
-        username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(username=email, password=password)
 
         if user is not None:
             login(request, user)
@@ -52,3 +53,14 @@ class RegistrationAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class ChangePasswordAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        request.data['email'] = request.user.username
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
