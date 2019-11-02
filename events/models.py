@@ -2,7 +2,6 @@ import datetime
 
 from django.db import models
 
-# Create your models here.
 from applicants.models import Applicant
 
 
@@ -36,7 +35,7 @@ class Choice(models.Model):
 class Book(models.Model):
     applicant = models.ForeignKey(Applicant, related_name='books', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    date = models.DateTimeField()
+    date = models.DateTimeField(unique_for_date=True)
     address = models.CharField(max_length=100)
     period = models.DurationField()
 
