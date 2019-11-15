@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from applicants.apps import ApplicantsConfig
 from applicants.models import Applicant
 from applicants.serializers import RegistrationSerializer
 from events.models import Book, Event, Choice
@@ -9,7 +8,7 @@ from events.models import Book, Event, Choice
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ('name', 'date', 'address',)
 
 
 class EventSerializerPOST(serializers.ModelSerializer):
@@ -31,4 +30,4 @@ class EventSerializerGET(serializers.ModelSerializer):
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
-        fields = '__all__'
+        fields = ('event', 'choice',)

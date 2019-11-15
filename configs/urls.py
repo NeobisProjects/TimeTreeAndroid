@@ -14,13 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import re_path, include
 
 urlpatterns = [
-    path(r'admin/', admin.site.urls),
-    path(r'applicants/', include('applicants.urls')),
-    path(r'values/', include('application_info.urls')),
-    path(r'events/', include('events.urls')),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^applicants/', include('applicants.urls')),
+    re_path(r'^values/', include('application_info.urls')),
+    re_path(r'^events/', include('events.urls')),
 ]
 
 admin.site.site_title = 'TimeTreeAndroid Administration'

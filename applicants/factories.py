@@ -7,9 +7,10 @@ from application_info.factories import DepartmentFactory, UniversityFactory
 class ApplicantFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Applicant
+        django_get_or_create = ('email',)
 
-    name = "Vladimir"
-    surname = "Putin"
+    name = "User"
+    surname = factory.sequence(lambda x: "%d" % x)
     email = "test@test.com"
     department = factory.SubFactory(DepartmentFactory)
     university = factory.SubFactory(UniversityFactory)

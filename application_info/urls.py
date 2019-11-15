@@ -1,7 +1,9 @@
-from django.urls import path
+from django.urls import re_path
 
 from application_info import views
 
+app_name = 'application_info'
+
 urlpatterns = [
-    path('', views.ValuesAPIView.as_view(), name='values')
+    re_path('^$', views.ValuesAPIView.as_view(), name='get_info')
 ]

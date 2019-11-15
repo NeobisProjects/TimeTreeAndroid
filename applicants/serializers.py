@@ -78,3 +78,9 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.save()
 
         return request
+
+
+class ApplicantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Applicant
+        fields = ('id', 'name', 'surname',)

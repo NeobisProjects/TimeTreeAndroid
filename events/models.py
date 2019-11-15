@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 
 from applicants.models import Applicant
+from events import constants
 
 
 class Event(models.Model):
@@ -13,31 +14,31 @@ class Event(models.Model):
     address = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'{self.name}'
+        return '{}'.format(self.name)
 
 
 class Choice(models.Model):
-    UNCERTAIN = 1
-    PARTICIPATE = 2
-    NON_PARTICIPATE = 3
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(Applicant, related_name='choice', on_delete=models.CASCADE)
+    choice = models.IntegerField(choices=constants.choices, default=constants.UNCERTAIN)
 
-    choices = (
-        (UNCERTAIN, 'Uncertain'),
-        (PARTICIPATE, 'Participant'),
-        (NON_PARTICIPATE, 'Non_participate')
-    )
+    def __str__(self):
+        return "{} {}".format(self.user, self.choice)
 
-    event = models.OneToOneField(Event, on_delete=models.CASCADE)
-    user = models.OneToOneField(Applicant, on_delete=models.CASCADE)
-    choice = models.IntegerField(choices=choices, default=UNCERTAIN)
+
+class Room(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+
+    def __str__(self):
+        return '{}'.format(self.name)
 
 
 class Book(models.Model):
     applicant = models.ForeignKey(Applicant, related_name='books', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    date = models.DateTimeField(unique_for_date=True)
-    address = models.CharField(max_length=100)
-    period = models.DurationField()
+    date = models.DateTimeField(unique=True)
+    address = models.ForeignKey(Room, related_name='books', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.name} - {self.date.strftime("%d %a. %H %M")} for {self.period}'
+        return '{} - {}'.format(self.name, self.date.strftime("%d %a. %H %M"))

@@ -1,12 +1,10 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 # Create your tests here.
+from django.urls import reverse
 from rest_framework.test import APIClient
 
 from applicants.factories import ApplicantFactory
-from applicants.models import Applicant
-from application_info.factories import DepartmentFactory, UniversityFactory
-from application_info.models import Department, University
 
 
 class AuxiliaryTestCase(TestCase):
@@ -24,7 +22,7 @@ class AuxiliaryTestCase(TestCase):
 
         self.client.login(username="test@test.com", password="test_password")
 
-        self.data = self.client.get("/values/")
+        self.data = self.client.get(reverse('application_info:get_info'))
 
     def test_created_departments_and_universities(self):
         self.assertContains(self.data, self.department)
