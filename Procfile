@@ -1,1 +1,1 @@
-web: gunicorn configs.wsgi --log-file -
+web: gunicorn TimeTreeAndroid.configs.wsgi --log-file -
