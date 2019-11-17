@@ -29,10 +29,10 @@ class EventTest(TestCase):
     def test_event_created(self):
         self.second_applicant = ApplicantFactory(email='test@foo.bar')
         self.data = {
-            "participants": [self.applicant.id, self.second_applicant.id],
             "name": "Meetup",
             "content": "Some text for test.",
             "date": timezone.now(),
+            "deadline": timezone.now()-timezone.timedelta(days=10),
             "address": "Unknown"
         }
 
@@ -40,11 +40,6 @@ class EventTest(TestCase):
 
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(str(Event.objects.filter(name='Meetup')[0]), self.data.get('name'))
-
-        self.response_get = self.client.get(reverse('events:event_list'))
-
-        self.assertContains(self.response_get, 'test@foo.bar')
-        self.assertContains(self.response_get, 'test@test.com')
 
     def test_book_creation(self):
         self.data = {
@@ -83,20 +78,8 @@ class EventTest(TestCase):
         self.assertIsInstance(Room.objects.filter(name='Coworking')[0], Room)
 
     def test_get_uncertain_users(self):
-        self.second_applicant = ApplicantFactory(email='test@foo.bar')
-        self.data = {
-            "participants": [self.applicant.id, self.second_applicant.id],
-            "name": "Meetup",
-            "content": "Some text for test.",
-            "date": timezone.now(),
-            "address": "Unknown"
-        }
-
-        self.response = self.client.post(reverse('events:event_list'), self.data, format='json')
-        self.ev = Event.objects.filter(name='Meetup')[0]
-        print(self.ev)
         self.list_of_uncertain_users = self.client.post(
             reverse('events:get_uncertain_users'),
-            data={'event_id': self.ev.id})
+            data={'event_id': 1})
 
         print(self.list_of_uncertain_users.data)

@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
+from applicants.mailing import send_greeting_mail
 from applicants.models import Applicant
 
 
@@ -8,6 +9,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
         fields = ('name', 'surname', 'email', 'department', 'university',)
+
+    def create(self, validate_data):
+        instance = super(RegistrationSerializer, self).create(validate_data)
+        send_greeting_mail(instance.email)
+        return instance
 
 
 class LoginSerializer(serializers.Serializer):

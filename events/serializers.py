@@ -1,26 +1,30 @@
 from rest_framework import serializers
 
-from applicants.models import Applicant
-from applicants.serializers import RegistrationSerializer
-from events.models import Book, Event, Choice
+from events.models import Book, Event, Choice, Room
 
 
-class BookSerializer(serializers.ModelSerializer):
+class CreateBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ('name', 'date', 'address',)
 
 
-class EventSerializerPOST(serializers.ModelSerializer):
-    participants = serializers.PrimaryKeyRelatedField(many=True, queryset=Applicant.objects.all())
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = ('name', 'date', 'applicant')
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    books = BookSerializer(many=True)
 
     class Meta:
-        model = Event
-        fields = '__all__'
+        model = Room
+        fields = ('id', 'name', 'location', 'books',)
 
 
-class EventSerializerGET(serializers.ModelSerializer):
-    participants = RegistrationSerializer(many=True, read_only=True)
+class EventSerializer(serializers.ModelSerializer):
+    # participants = serializers.PrimaryKeyRelatedField(many=True, queryset=Applicant.objects.all())
 
     class Meta:
         model = Event

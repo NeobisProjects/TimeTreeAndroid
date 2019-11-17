@@ -7,10 +7,11 @@ from events import constants
 
 
 class Event(models.Model):
-    participants = models.ManyToManyField(Applicant, related_name='users_events')
+    # participants = models.ManyToManyField(Applicant, related_name='users_events')
     name = models.CharField(max_length=20)
     content = models.TextField(max_length=500)
     date = models.DateTimeField()
+    deadline = models.DateTimeField()
     address = models.CharField(max_length=100)
 
     def __str__(self):
@@ -18,7 +19,7 @@ class Event(models.Model):
 
 
 class Choice(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, related_name='choice', on_delete=models.CASCADE)
     user = models.ForeignKey(Applicant, related_name='choice', on_delete=models.CASCADE)
     choice = models.IntegerField(choices=constants.choices, default=constants.UNCERTAIN)
 
@@ -42,3 +43,6 @@ class Book(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.name, self.date.strftime("%d %a. %H %M"))
+
+    class Meta:
+        ordering = ('date',)

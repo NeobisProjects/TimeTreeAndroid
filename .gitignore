@@ -3,6 +3,7 @@ venv/
 .idea/
 db.sqlite3
 .pyc
-*/migrations/__pycache__/*
+*/migrations/__pycache__/
 */__pycache__/
-*/migrations/00*
+__pycache__/
+# */migrations/00*

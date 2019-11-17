@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login
 # Create your views here.
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from applicants.mailing import send_greeting_mail
+from applicants.models import Applicant
 from applicants.serializers import LoginSerializer, RegistrationSerializer, ChangePasswordSerializer
 
 
@@ -44,14 +45,9 @@ class LoginAPIView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-class RegistrationAPIView(APIView):
-    def post(self, request):
-        serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            applicant = serializer.save()
-            send_greeting_mail(applicant.email)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class RegistrationAPIView(generics.CreateAPIView):
+    serializer_class = RegistrationSerializer
+    queryset = Applicant.objects.all()
 
 
 class ChangePasswordAPIView(APIView):
