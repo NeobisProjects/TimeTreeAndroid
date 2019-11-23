@@ -19,12 +19,15 @@ class Event(models.Model):
 
 
 class Choice(models.Model):
-    event = models.ForeignKey(Event, related_name='choice', on_delete=models.CASCADE)
-    user = models.ForeignKey(Applicant, related_name='choice', on_delete=models.CASCADE)
-    choice = models.IntegerField(choices=constants.choices, default=constants.UNCERTAIN)
+    event = models.ForeignKey(Event, related_name='choices', on_delete=models.CASCADE)
+    user = models.ForeignKey(Applicant, related_name='choices', on_delete=models.CASCADE)
+    choice = models.IntegerField(choices=constants.choices, default=constants.CONFUSED)
+
+    class Meta:
+        unique_together = ['event', 'user']
 
     def __str__(self):
-        return "{} {}".format(self.user, self.choice)
+        return "{}".format(self.user)
 
 
 class Room(models.Model):
@@ -42,7 +45,8 @@ class Book(models.Model):
     address = models.ForeignKey(Room, related_name='books', on_delete=models.CASCADE)
 
     def __str__(self):
-        return '{} - {}'.format(self.name, self.date.strftime("%d %a. %H %M"))
+        return "{}".format(self.name)
 
     class Meta:
         ordering = ('date',)
+        get_latest_by = ('date',)

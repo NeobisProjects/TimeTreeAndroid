@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 from applicants.factories import ApplicantFactory
 from applicants.models import Applicant
 from events import constants
-from events.factories import RoomFactory, EventFactory
+from events.factories import RoomFactory, EventFactory, ChoiceFactory
 from events.models import Choice, Event, Book, Room
 
 
@@ -54,32 +54,38 @@ class EventTest(TestCase):
     def test_user_want_to_event(self):
         self.data = {
             "event": self.event.id,
-            "choice": constants.PARTICIPATE,
+            "choice": constants.ACCEPTED,
         }
 
         self.choice = self.client.post(reverse('events:set_choice'), self.data, format='json')
         self.assertEqual(self.choice.status_code, status.HTTP_201_CREATED)
         self.assertIsInstance(Choice.objects.filter(event=self.event.id)[0], Choice)
-        self.assertEqual(len(Choice.objects.filter(choice=constants.PARTICIPATE)), 1)
-        self.assertEqual(len(Choice.objects.filter(choice=constants.NON_PARTICIPATE)), 0)
+        self.assertEqual(len(Choice.objects.filter(choice=constants.ACCEPTED)), 1)
+        self.assertEqual(len(Choice.objects.filter(choice=constants.REJECTED)), 0)
 
     def test_user_doesnt_want_to_event(self):
         self.data = {
             "event": self.event.id,
-            "choice": constants.NON_PARTICIPATE
+            "choice": constants.REJECTED
         }
 
         self.choice = self.client.post(reverse('events:set_choice'), self.data, format='json')
         self.assertEqual(self.choice.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(len(Choice.objects.filter(choice=constants.NON_PARTICIPATE)), 1)
-        self.assertEqual(len(Choice.objects.filter(choice=constants.PARTICIPATE)), 0)
+        self.assertEqual(len(Choice.objects.filter(choice=constants.REJECTED)), 1)
+        self.assertEqual(len(Choice.objects.filter(choice=constants.ACCEPTED)), 0)
 
     def test_room_created(self):
         self.assertIsInstance(Room.objects.filter(name='Coworking')[0], Room)
 
     def test_get_uncertain_users(self):
+        self.new_event = EventFactory(name="New event")
+        self.new_applicant = ApplicantFactory(email="test@f.com")
+        ChoiceFactory(event=self.new_event, user=self.applicant, choice=constants.CONFUSED)
+        ChoiceFactory(event=self.new_event, user=self.new_applicant, choice=constants.ACCEPTED)
+        ChoiceFactory(event=self.event, user=self.applicant, choice=constants.CONFUSED)
+        ChoiceFactory(event=self.event, user=self.new_applicant, choice=constants.ACCEPTED)
         self.list_of_uncertain_users = self.client.post(
             reverse('events:get_uncertain_users'),
-            data={'event_id': 1})
+            data={'event_id': self.new_event.id})
 
-        print(self.list_of_uncertain_users.data)
+        print(self.list_of_uncertain_users.content)

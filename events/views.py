@@ -47,12 +47,22 @@ class SetChoiceView(APIView):
 class GetUncertainUsersByEventId(APIView):
     permission_classes = (IsAuthenticated,)
 
+    def get(self, request):
+        events = Event.objects.all()
+        data = []
+        for event in events:
+            q = Choice.objects.exclude(event__in=events)
+            data.append(q)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
     def post(self, request):
         event_id = request.data.get('event_id')
         event = get_object_or_404(Event, id=event_id)
 
         data = []
         if event:
-            for choice in Choice.objects.filter(event_id=event_id).filter(choice=constants.UNCERTAIN):
+            for choice in Choice.objects.filter(event_id=event_id).filter(choice=constants.CONFUSED):
                 data.append(ApplicantSerializer(choice.user).data)
         return Response(data=data, status=status.HTTP_200_OK)
+

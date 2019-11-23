@@ -1,9 +1,9 @@
-UNCERTAIN = 1
-PARTICIPATE = 2
-NON_PARTICIPATE = 3
+CONFUSED = 1
+ACCEPTED = 2
+REJECTED = 3
 
 choices = (
-    (UNCERTAIN, 'Uncertain'),
-    (PARTICIPATE, 'Participant'),
-    (NON_PARTICIPATE, 'Non_participate')
+    (CONFUSED, 'Confused'),
+    (ACCEPTED, 'Accepted'),
+    (REJECTED, 'Rejected')
 )

@@ -89,4 +89,4 @@ class ChangePasswordSerializer(serializers.Serializer):
 class ApplicantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
-        fields = ('id', 'name', 'surname',)
+        fields = ('id', 'name', 'surname', 'email',)
