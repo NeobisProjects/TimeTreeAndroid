@@ -1,6 +1,7 @@
+from django.conf.urls import url
 from django.contrib import admin
-# Register your models here.
-from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.urls import reverse, path
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -8,10 +9,20 @@ from events import constants
 from events.models import Event, Book, Room, Choice
 
 
-# admin.site.register(Event)
-# admin.site.register(Book)
-# admin.site.register(Room)
-# admin.site.register(Choice)
+def format_for_user(obj, choice_type):
+    choices = obj.choices.filter(choice=choice_type)
+    msg = '<li class="drpdwn">{}<ul>'.format(choices.count())
+    for choice in choices:
+        link = reverse('admin:applicants_applicant_change', args=[choice.user.id])
+        msg += format_html("<li><a href={}>{}</a></li>", link, choice.user)
+    msg += '</ul></li>'
+    return format_html(msg)
+
+
+class BaseMixin:
+    def get_model_info(self):
+        app_label = self.model._meta.app_label
+        return (app_label, self.model._meta.model_name)
 
 
 @admin.register(Book)
@@ -29,18 +40,23 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
+    class Media:
+        css = {
+            'all': ('css/my_style.css',)
+        }
+
     def get_accepted_count(self, obj):
-        return obj.choices.filter(choice=constants.ACCEPTED).count()
+        return format_for_user(obj, constants.ACCEPTED)
 
     get_accepted_count.short_description = 'Accepted'
 
     def get_rejected_count(self, obj):
-        return obj.choices.filter(choice=constants.REJECTED).count()
+        return format_for_user(obj, constants.REJECTED)
 
     get_rejected_count.short_description = 'Rejected'
 
     def get_confused_count(self, obj):
-        return obj.choices.filter(choice=constants.CONFUSED).count()
+        return format_for_user(obj, constants.CONFUSED)
 
     get_confused_count.short_description = 'Confused'
 
@@ -49,12 +65,19 @@ class EventAdmin(admin.ModelAdmin):
                     'get_rejected_count',
                     'get_confused_count')
 
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'content', 'date', 'address',)
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('is_with_poll', 'deadline',),
+        }),
+    )
+
 
 @admin.register(Choice)
-class ChoiceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'event', 'formatted_choice',)
-    list_filter = ('event', 'choice',)
-
+class ChoiceAdmin(admin.ModelAdmin, BaseMixin):
     def formatted_choice(self, obj):
         color = 'yellow'
         if obj.choice == constants.ACCEPTED:
@@ -64,8 +87,25 @@ class ChoiceAdmin(admin.ModelAdmin):
         return mark_safe(
             '<p style="color: white; background:{}; text-align: center;">{}</p>'.format(
                 color, obj.get_choice_display()))
-
     formatted_choice.short_description = 'choice'
+
+    change_list_template = 'choice_change_list.html'
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            url(r'^notify/$',
+                self.admin_site.admin_view(self.notify),
+                name='%s_%s_notify' % self.get_model_info()),
+        ]
+        return my_urls + urls
+
+    def notify(self, obj):
+
+        return HttpResponseRedirect('../')
+
+    list_display = ('user', 'event', 'formatted_choice',)
+    list_filter = ('event', 'choice',)
 
 
 @admin.register(Room)
@@ -82,4 +122,4 @@ class RoomAdmin(admin.ModelAdmin):
                                                                  latest_book.date.strftime("%H:%M %d.%m.%y")))
         return
 
-    nearest_book.short_description = 'Nearest event'
+    nearest_book.short_description = 'Nearest book'

@@ -5,8 +5,7 @@ from applicants.models import Applicant
 from events.models import Event, Choice
 
 
-# @receiver(post_save, sender=Event)
-# def create_default_choices(sender, instance=None, created=False, **kwargs):
-#     if created:
-#         for user in Applicant.objects.all():
-#             Choice.objects.create(event=sender, user=user)
+@receiver(post_save, sender=Event)
+def create_default_choices(sender, instance=None, created=False, **kwargs):
+    if created:
+        print(sender, instance)

@@ -1,5 +1,6 @@
 from django.contrib import admin
 # Register your models here.
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
@@ -20,7 +21,11 @@ class ApplicantAdmin(admin.ModelAdmin):
         event_id = request.POST.get('event')
         event = get_object_or_404(Event, id=event_id)
         for obj in queryset:
-            Choice.objects.create(user=obj, event=event)
+            Choice.objects.get_or_create(user=obj, event=event)
 
-    send_event_notify.short_description = 'Send notify to event.'
+    send_event_notify.short_description = 'Send notify to even.'
     actions = ('send_event_notify',)
+
+
+class ApplicantInline(admin.TabularInline):
+    model = Applicant

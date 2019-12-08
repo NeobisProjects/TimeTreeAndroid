@@ -11,8 +11,9 @@ class Event(models.Model):
     name = models.CharField(max_length=20)
     content = models.TextField(max_length=500)
     date = models.DateTimeField()
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(null=True)
     address = models.CharField(max_length=100)
+    is_with_poll = models.BooleanField(default=False)
 
     def __str__(self):
         return '{}'.format(self.name)
