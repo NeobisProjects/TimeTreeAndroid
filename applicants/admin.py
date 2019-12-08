@@ -26,6 +26,8 @@ class ApplicantAdmin(admin.ModelAdmin):
     send_event_notify.short_description = 'Send notify to even.'
     actions = ('send_event_notify',)
 
+    search_fields = ['name', ]
+
 
 class ApplicantInline(admin.TabularInline):
     model = Applicant
