@@ -16,11 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import re_path, include
 
-urlpatterns = [
-    re_path(r'^admin/', admin.site.urls),
+
+api = [
     re_path(r'^applicants/', include('applicants.urls')),
     re_path(r'^values/', include('application_info.urls')),
     re_path(r'^events/', include('events.urls')),
+    re_path(r'^rest_auth/', include('rest_auth.urls')),
+]
+
+urlpatterns = [
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^api/', include(api))
 ]
 
 admin.site.site_title = 'TimeTreeAndroid Administration'

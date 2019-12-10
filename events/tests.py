@@ -19,11 +19,9 @@ class EventTest(TestCase):
         self.room = RoomFactory()
         self.event = EventFactory()
         self.applicant = ApplicantFactory()
-        self.user = User.objects.filter(username=self.applicant.email).first()
-        self.user.set_password("test_password")
-        self.user.is_active = True
+        self.user = User.objects.get(username='test@test.com')
+        self.user.set_password('test_password')
         self.user.save()
-
         self.client.login(username="test@test.com", password="test_password")
 
     def test_event_created(self):
@@ -76,16 +74,3 @@ class EventTest(TestCase):
 
     def test_room_created(self):
         self.assertIsInstance(Room.objects.filter(name='Coworking')[0], Room)
-
-    def test_get_uncertain_users(self):
-        self.new_event = EventFactory(name="New event")
-        self.new_applicant = ApplicantFactory(email="test@f.com")
-        ChoiceFactory(event=self.new_event, user=self.applicant, choice=constants.CONFUSED)
-        ChoiceFactory(event=self.new_event, user=self.new_applicant, choice=constants.ACCEPTED)
-        ChoiceFactory(event=self.event, user=self.applicant, choice=constants.CONFUSED)
-        ChoiceFactory(event=self.event, user=self.new_applicant, choice=constants.ACCEPTED)
-        self.list_of_uncertain_users = self.client.post(
-            reverse('events:get_uncertain_users'),
-            data={'event_id': self.new_event.id})
-
-        print(self.list_of_uncertain_users.content)

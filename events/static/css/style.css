@@ -17,7 +17,7 @@
 
 .drpdwn:hover ul{
     display: block;
-    position: fixed;
+    position: relative;
     background: #41768f;
     margin: 0;
     border-radius: 10px;

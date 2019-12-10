@@ -9,7 +9,7 @@ def send_message(email, html, *kwargs):
     html_message = render_to_string(html, *kwargs)
     message = strip_tags(html_message)
     send_mail(
-        'Neobis Clubs Application',
+        'TimeTreeNeobis',
         message,
         settings.DEFAULT_FROM_EMAIL,
         [email],
@@ -18,10 +18,12 @@ def send_message(email, html, *kwargs):
 
 
 def send_greeting_mail(email):
+    send_message(email, 'greeting_mail.html', {'email': email})
+
+
+def send_reset_password(email):
     user = User.objects.get(email=email)
-    user.is_active = True
     password = User.objects.make_random_password(length=12)
     user.set_password(password)
     user.save()
-
-    send_message(email, 'greeting_mail.html', {'email': email, 'password': password})
+    send_message(email, 'reset_password.html', {'email': email, 'password': password})

@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
-from application_info.models import Department, University
+from application_info.models import Department
 
 
 class Applicant(models.Model):
@@ -14,10 +14,6 @@ class Applicant(models.Model):
     department = models.ForeignKey(Department,
                                    verbose_name=_('User\'s department'),
                                    related_name='users_department',
-                                   on_delete=models.PROTECT)
-    university = models.ForeignKey(University,
-                                   verbose_name=_('User\'s university'),
-                                   related_name='users_university',
                                    on_delete=models.PROTECT)
 
     def __str__(self):

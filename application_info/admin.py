@@ -1,11 +1,6 @@
 from django.contrib import admin
 
-from application_info.models import University, Department
-
-
-@admin.register(University)
-class UniversityAdmin(admin.ModelAdmin):
-    pass
+from application_info.models import Department
 
 
 @admin.register(Department)

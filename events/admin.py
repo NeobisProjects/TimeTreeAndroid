@@ -42,7 +42,7 @@ class BookAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     class Media:
         css = {
-            'all': ('css/my_style.css',)
+            'all': ('css/style.css',)
         }
 
     def get_accepted_count(self, obj):
@@ -101,7 +101,6 @@ class ChoiceAdmin(admin.ModelAdmin, BaseMixin):
         return my_urls + urls
 
     def notify(self, obj):
-
         return HttpResponseRedirect('../')
 
     list_display = ('user', 'event', 'formatted_choice',)

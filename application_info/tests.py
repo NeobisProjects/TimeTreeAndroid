@@ -13,7 +13,6 @@ class AuxiliaryTestCase(TestCase):
 
         self.applicant = ApplicantFactory()
         self.department = self.applicant.department
-        self.university = self.applicant.university
 
         self.user = User.objects.filter(username=self.applicant.email).first()
         self.user.set_password("test_password")
@@ -24,6 +23,5 @@ class AuxiliaryTestCase(TestCase):
 
         self.data = self.client.get(reverse('application_info:get_info'))
 
-    def test_created_departments_and_universities(self):
+    def test_created_departments(self):
         self.assertContains(self.data, self.department)
-        self.assertContains(self.data, self.university)

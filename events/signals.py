@@ -8,4 +8,4 @@ from events.models import Event, Choice
 @receiver(post_save, sender=Event)
 def create_default_choices(sender, instance=None, created=False, **kwargs):
     if created:
-        print(sender, instance)
+        pass

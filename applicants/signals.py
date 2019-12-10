@@ -6,10 +6,10 @@ from rest_framework.authtoken.models import Token
 from applicants.models import Applicant
 
 
-@receiver(pre_save, sender=User)
-def change_user_active(sender, instance, **kwargs):
-    if instance._state.adding and not instance.is_superuser:
-        instance.is_active = False
+# @receiver(pre_save, sender=User)
+# def change_user_active(sender, instance, **kwargs):
+#     if instance._state.adding and not instance.is_superuser:
+#         instance.is_active = False
 
 
 @receiver(pre_save, sender=Applicant)

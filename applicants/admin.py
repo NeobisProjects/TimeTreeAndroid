@@ -1,6 +1,5 @@
 from django.contrib import admin
 # Register your models here.
-from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
@@ -13,8 +12,8 @@ from events.models import Event, Choice
 class ApplicantAdmin(admin.ModelAdmin):
     action_form = UpdateActionForm
     exclude = ('user',)
-    list_display = ('__str__', 'email', 'department', 'university',)
-    list_filter = ('department__name', 'university__name',)
+    list_display = ('__str__', 'email', 'department',)
+    list_filter = ('department__name',)
 
     @transaction.atomic
     def send_event_notify(self, request, queryset):
@@ -28,6 +27,4 @@ class ApplicantAdmin(admin.ModelAdmin):
 
     search_fields = ['name', ]
 
-
-class ApplicantInline(admin.TabularInline):
-    model = Applicant
+    change_list_template = 'applicant_change.html'

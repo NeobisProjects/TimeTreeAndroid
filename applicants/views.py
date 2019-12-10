@@ -6,9 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from applicants.mailing import send_greeting_mail
+from applicants.mailing import send_reset_password
 from applicants.models import Applicant
-from applicants.serializers import LoginSerializer, RegistrationSerializer, ChangePasswordSerializer
+from applicants.serializers import LoginSerializer, RegistrationSerializer, ChangePasswordSerializer, \
+    ResetPasswordSerializer
 
 
 class LoginAPIView(APIView):
@@ -50,13 +51,25 @@ class RegistrationAPIView(generics.CreateAPIView):
     queryset = Applicant.objects.all()
 
 
-class ChangePasswordAPIView(APIView):
+class ChangePasswordAPIView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
 
-    def post(self, request):
-        request.data['email'] = request.user.username
-        serializer = ChangePasswordSerializer(data=request.data)
-
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, user=request.user)
         if serializer.is_valid(raise_exception=True):
-            return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            request.user.set_password(request.data['new_password'])
+            request.user.save()
+            return Response(data={"details": "Password changed successfully."}, status=status.HTTP_200_OK)
+        return Response(data={"details": "We have a problems."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResetPasswordAPIView(generics.CreateAPIView):
+    serializer_class = ResetPasswordSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            send_reset_password(request.data['email'])
+            return Response(data={"details": "New password send to email."}, status=status.HTTP_200_OK)
+        return Response(data={"details": "We have a problems."}, status=status.HTTP_400_BAD_REQUEST)

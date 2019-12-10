@@ -1,7 +1,7 @@
 import factory
 
 from applicants.models import Applicant
-from application_info.factories import DepartmentFactory, UniversityFactory
+from application_info.factories import DepartmentFactory
 
 
 class ApplicantFactory(factory.django.DjangoModelFactory):
@@ -13,4 +13,3 @@ class ApplicantFactory(factory.django.DjangoModelFactory):
     surname = factory.sequence(lambda x: "%d" % x)
     email = "test@test.com"
     department = factory.SubFactory(DepartmentFactory)
-    university = factory.SubFactory(UniversityFactory)

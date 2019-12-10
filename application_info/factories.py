@@ -1,6 +1,6 @@
 from factory.django import DjangoModelFactory
 
-from application_info.models import Department, University
+from application_info.models import Department
 
 
 class DepartmentFactory(DjangoModelFactory):
@@ -8,11 +8,3 @@ class DepartmentFactory(DjangoModelFactory):
         model = Department
 
     name = "Backend"
-
-
-class UniversityFactory(DjangoModelFactory):
-    class Meta:
-        model = University
-
-    name = "Hogwarts"
-    city = "Scotland"

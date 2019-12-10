@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth',
 
     'applicants.apps.ApplicantsConfig',
     'application_info.apps.ApplicationInfoConfig',
@@ -162,6 +163,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication'
     ]
+}
+
+
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER': 'applicants.serializers.LoginSerializer',
+    # 'TOKEN_SERIALIZER': 'path.to.custom.TokenSerializer',
+
 }
 
 django_heroku.settings(locals())
