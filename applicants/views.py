@@ -58,6 +58,7 @@ class RegistrationAPIView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
+            serializer.save()
             return Response(data={'details': 'Registration was successful!'}, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
