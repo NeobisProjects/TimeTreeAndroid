@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
@@ -23,3 +23,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.get_or_create(user=instance)
 
+
+@receiver(post_delete, sender=Applicant)
+def delete_related_user(sender, instance, **kwargs):
+    User.objects.filter(username=instance.email).delete()

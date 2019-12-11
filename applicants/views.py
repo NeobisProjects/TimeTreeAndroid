@@ -31,15 +31,20 @@ class LoginAPIView(APIView):
             token, created = Token.objects.get_or_create(user=user)
 
             if not hasattr(user, 'applicant'):
-                applicant_id = 'admin'
+                data = {
+                    'token': token.key,
+                    'applicant_id': 'admin',
+                    'email': user.email
+                }
             else:
-                applicant_id = user.applicant.pk
-
-            data = {
-                'token': token.key,
-                'applicant_id': applicant_id,
-                'email': user.email
-            }
+                data = {
+                    'token': token.key,
+                    'applicant_id': user.applicant.pk,
+                    'email': user.email,
+                    'name': user.applicant.name,
+                    'surname': user.applicant.surname,
+                    'department': user.applicant.department_id,
+                }
 
             return Response(data, status=status.HTTP_200_OK)
         else:
@@ -49,6 +54,12 @@ class LoginAPIView(APIView):
 class RegistrationAPIView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
     queryset = Applicant.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            return Response(data={'details': 'Registration was successful!'}, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAPIView(generics.CreateAPIView):
