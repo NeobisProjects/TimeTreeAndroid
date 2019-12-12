@@ -11,12 +11,12 @@ from events.models import Event, Book, Room, Choice
 
 def format_for_user(obj, choice_type):
     choices = obj.choices.filter(choice=choice_type)
-    msg = '<li class="drpdwn">{}<ul>'.format(choices.count())
+    html = "<div class='collapsible'><p>{}</p><ul>".format(choices.count())
     for choice in choices:
         link = reverse('admin:applicants_applicant_change', args=[choice.user.id])
-        msg += format_html("<li><a href={}>{}</a></li>", link, choice.user)
-    msg += '</ul></li>'
-    return format_html(msg)
+        html += "<a href={}><li>{}</li></a>".format(link, choice.user)
+    html += "</ul></div>"
+    return mark_safe(html)
 
 
 class BaseMixin:
@@ -42,8 +42,9 @@ class BookAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     class Media:
         css = {
-            'all': ('css/style.css',)
+            'all': ('css/style.css',),
         }
+        js = ('js/collapse.js',)
 
     def get_accepted_count(self, obj):
         return format_for_user(obj, constants.ACCEPTED)

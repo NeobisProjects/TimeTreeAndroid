@@ -1,0 +1,36 @@
+.collapsible{
+    margin: 0;
+}
+.collapsible ul{
+    list-style: none;
+    height: 0;
+    transition: .5s ease-in-out;
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
+}
+.collapsible ul li{
+    display: block;
+    padding: 5px;
+    background: #ced8d9;
+    width: 100%;
+    margin: 0;
+}
+.collapsible ul li:hover{
+    background: #989492;
+}
+.collapsible p{
+    width: 100%;
+    background: #ababab;
+    padding: 10px;
+    font-size: 1.5em;
+    border: none;
+    text-align: center;
+    margin: 0;
+}
+.collapsible p:hover{
+    background: #888;
+}
+.active ul{
+    transition: .5s ease-in-out;
+}

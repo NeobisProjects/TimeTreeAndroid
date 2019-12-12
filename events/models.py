@@ -13,7 +13,7 @@ class Event(models.Model):
     date = models.DateTimeField()
     address = models.CharField(max_length=100)
     is_with_poll = models.BooleanField(default=False)
-    deadline = models.DateTimeField(null=True)
+    deadline = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.name)
