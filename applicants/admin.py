@@ -12,7 +12,7 @@ from events.models import Event, Choice
 class ApplicantAdmin(admin.ModelAdmin):
     action_form = UpdateActionForm
     exclude = ('user',)
-    list_display = ('__str__', 'email', 'department',)
+    list_display = ('__str__', 'email', 'department', 'get_user_events')
     list_filter = ('department__name',)
 
     @transaction.atomic
@@ -21,10 +21,15 @@ class ApplicantAdmin(admin.ModelAdmin):
         event = get_object_or_404(Event, id=event_id)
         for obj in queryset:
             Choice.objects.get_or_create(user=obj, event=event)
+    send_event_notify.short_description = 'Send notify to event.'
 
-    send_event_notify.short_description = 'Send notify to even.'
+    def get_user_events(self, obj):
+        pass
+    get_user_events.short_description = 'User events'
+
     actions = ('send_event_notify',)
 
     search_fields = ['name', ]
 
     change_list_template = 'applicant_change.html'
+

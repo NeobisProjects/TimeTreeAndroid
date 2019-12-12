@@ -18,7 +18,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         password = validate_data.pop('password')
         instance = super(RegistrationSerializer, self).create(validate_data)
         user = User.objects.get(username=instance.email)
-        user.is_active = True
         user.set_password(password)
         user.save()
         send_greeting_mail(instance.email)

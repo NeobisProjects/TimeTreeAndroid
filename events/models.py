@@ -8,12 +8,12 @@ from events import constants
 
 class Event(models.Model):
     # participants = models.ManyToManyField(Applicant, related_name='users_events')
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
     content = models.TextField(max_length=500)
     date = models.DateTimeField()
-    deadline = models.DateTimeField(null=True)
     address = models.CharField(max_length=100)
     is_with_poll = models.BooleanField(default=False)
+    deadline = models.DateTimeField(null=True)
 
     def __str__(self):
         return '{}'.format(self.name)

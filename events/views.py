@@ -1,12 +1,11 @@
 # Create your views here.
-from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from events import constants
-from events.models import Event, Choice, Room
+from configs.constants import BAD_REQUEST_MESSAGE
+from events.models import Event, Room
 from events.serializers import EventSerializer, ChoiceSerializer, \
     RoomSerializer, CreateBookSerializer
 
@@ -28,8 +27,8 @@ class BookView(APIView):
         serializer = CreateBookSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(applicant=request.user.applicant)
-            return Response(data={'details': 'Successfully booked time.'}, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': 'Successfully booked time.'}, status=status.HTTP_201_CREATED)
+        return Response(data={'message': BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SetChoiceView(APIView):
@@ -39,9 +38,8 @@ class SetChoiceView(APIView):
         serializer = ChoiceSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user.applicant)
-            return Response(data={'details': 'User choice is set.'}, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
+        return Response(data={'message': BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
 # class GetUncertainUsersByEventId(APIView):
 #     permission_classes = (IsAuthenticated,)
@@ -64,4 +62,3 @@ class SetChoiceView(APIView):
 #             for choice in Choice.objects.filter(event_id=event_id).filter(choice=constants.CONFUSED):
 #                 data.append(ApplicantSerializer(choice.user).data)
 #         return Response(data=data, status=status.HTTP_200_OK)
-

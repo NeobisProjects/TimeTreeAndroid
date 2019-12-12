@@ -1,3 +1,4 @@
+from django.utils.timezone import now
 from rest_framework import serializers
 
 from events.models import Book, Event, Choice, Room
@@ -12,20 +13,23 @@ class CreateBookSerializer(serializers.ModelSerializer):
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ('name', 'date', 'applicant')
+        fields = ('name', 'date', 'applicant',)
 
 
 class RoomSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True)
+    books = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
         fields = ('id', 'name', 'location', 'books',)
 
+    def get_books(self, room):
+        print(room)
+        q = Book.objects.filter(address=room, date__gte=now())
+        return BookSerializer(q, many=True).data
+
 
 class EventSerializer(serializers.ModelSerializer):
-    # participants = serializers.PrimaryKeyRelatedField(many=True, queryset=Applicant.objects.all())
-
     class Meta:
         model = Event
         fields = '__all__'

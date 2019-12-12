@@ -10,6 +10,7 @@ from applicants.mailing import send_reset_password
 from applicants.models import Applicant
 from applicants.serializers import LoginSerializer, RegistrationSerializer, ChangePasswordSerializer, \
     ResetPasswordSerializer
+from configs.constants import BAD_REQUEST_MESSAGE
 
 
 class LoginAPIView(APIView):
@@ -48,7 +49,7 @@ class LoginAPIView(APIView):
 
             return Response(data, status=status.HTTP_200_OK)
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(data={"message": BAD_REQUEST_MESSAGE}, status=status.HTTP_404_NOT_FOUND)
 
 
 class RegistrationAPIView(generics.CreateAPIView):
@@ -59,8 +60,8 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(data={'details': 'Registration was successful!'}, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "Registration was successful!"}, status=status.HTTP_201_CREATED)
+        return Response(data={"message": BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAPIView(generics.CreateAPIView):
@@ -72,8 +73,8 @@ class ChangePasswordAPIView(generics.CreateAPIView):
         if serializer.is_valid(raise_exception=True):
             request.user.set_password(request.data['new_password'])
             request.user.save()
-            return Response(data={"details": "Password changed successfully."}, status=status.HTTP_200_OK)
-        return Response(data={"details": "We have a problems."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+        return Response(data={"message": BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ResetPasswordAPIView(generics.CreateAPIView):
@@ -83,5 +84,5 @@ class ResetPasswordAPIView(generics.CreateAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             send_reset_password(request.data['email'])
-            return Response(data={"details": "New password send to email."}, status=status.HTTP_200_OK)
-        return Response(data={"details": "We have a problems."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "New password send to email."}, status=status.HTTP_200_OK)
+        return Response(data={"message": "We have a problems."}, status=status.HTTP_400_BAD_REQUEST)
