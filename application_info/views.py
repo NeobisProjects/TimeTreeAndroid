@@ -9,8 +9,6 @@ from application_info.serializers import DepartmentSerializer
 
 
 class ValuesAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
-
     def get(self, request):
         departments = DepartmentSerializer(Department.objects.all(),
                                            many=True).data

@@ -27,16 +27,12 @@ class ApplicantTestCase(TestCase):
         self.check_user = User.objects.filter(username="test@test.com").first()
 
     def test_can_view_info(self):
-        a = self.client.login(username="test@test.com", password="test_password")
         self.values = self.client.get(reverse('application_info:get_info'))
         self.assertEqual(self.values.status_code, status.HTTP_200_OK)
 
     def test_create_user(self):
         self.assertEqual(self.user.status_code, status.HTTP_201_CREATED)
         self.assertTrue(self.check_user)
-
-    def test_cannot_view_info(self):
-        self.assertEqual(self.values.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_can_change_password(self):
         a = self.client.login(username="test@test.com", password="test_password")
