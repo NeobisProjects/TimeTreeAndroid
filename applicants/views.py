@@ -33,12 +33,17 @@ class LoginAPIView(APIView):
 
             if not hasattr(user, 'applicant'):
                 data = {
+                    'is_staff': user.is_staff,
                     'token': token.key,
-                    'applicant_id': 'admin',
-                    'email': user.email
+                    'applicant_id': -1,
+                    'email': user.email,
+                    'name': None,
+                    'surname': None,
+                    'department': None,
                 }
             else:
                 data = {
+                    'is_staff': user.is_staff,
                     'token': token.key,
                     'applicant_id': user.applicant.pk,
                     'email': user.email,

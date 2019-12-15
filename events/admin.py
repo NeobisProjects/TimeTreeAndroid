@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.urls import reverse, path
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -33,9 +34,9 @@ class BookAdmin(admin.ModelAdmin):
 
     applicant_info.short_description = 'Applicant'
 
-    list_display = ('name', 'applicant_info', 'date', 'address',)
-    list_filter = ('address', 'date',)
-    ordering = ('address', 'date',)
+    list_display = ('name', 'applicant_info', 'date_begin', 'date_end', 'address',)
+    list_filter = ('address', 'date_begin',)
+    ordering = ('address',)
 
 
 @admin.register(Event)
@@ -114,12 +115,12 @@ class RoomAdmin(admin.ModelAdmin):
     empty_value_display = 'There is no books for this room yet.'
 
     def nearest_book(self, obj):
-        latest_book = obj.books.latest()
+        latest_book = obj.books.filter(date_begin__gte=timezone.now()).earliest()
         if latest_book:
             link = reverse('admin:events_book_change', args=[latest_book.id])
             return format_html('<a href="{}">{} ({})</a>'.format(link,
                                                                  latest_book,
-                                                                 latest_book.date.strftime("%H:%M %d.%m.%y")))
+                                                                 latest_book.date_begin.strftime("%H:%M %d.%m.%y")))
         return
 
     nearest_book.short_description = 'Nearest book'

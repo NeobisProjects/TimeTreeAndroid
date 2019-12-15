@@ -10,8 +10,7 @@ class Applicant(models.Model):
     user = models.OneToOneField(User, related_name='applicant', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100, unique=True,
-                              error_messages={"message": "User with this email already exists."})
+    email = models.EmailField(max_length=100, unique=True)
     department = models.ForeignKey(Department,
                                    verbose_name=_('User\'s department'),
                                    related_name='users_department',

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'fcm_django',
 
     'applicants.apps.ApplicantsConfig',
     'application_info.apps.ApplicationInfoConfig',
@@ -119,13 +120,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = config('TIME_ZONE', default='UTC')
+TIME_ZONE = config('TIME_ZONE')
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -156,7 +157,8 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 HOST_URL = config('HOST_URL')
 
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': "%Y-%m-%d - %H:%M:%S",
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M",
+    'TIME_FORMAT': '%H:%M',
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
@@ -170,6 +172,10 @@ REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'applicants.serializers.LoginSerializer',
     # 'TOKEN_SERIALIZER': 'path.to.custom.TokenSerializer',
 
+}
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
 }
 
 django_heroku.settings(locals())

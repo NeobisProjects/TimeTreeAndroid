@@ -1,4 +1,5 @@
 # Create your views here.
+from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,10 +11,24 @@ from events.serializers import EventSerializer, ChoiceSerializer, \
     RoomSerializer, CreateBookSerializer
 
 
-class EventView(generics.ListCreateAPIView):
+class EventView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = Event.objects.all()
+    # queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+    def get_queryset(self):
+        return Event.objects.filter(choices__user=self.request.user, date__gte=timezone.now())
+
+
+class EventWithPollView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    # queryset = Event.objects.filter(is_with_poll__isnull=True)
+    serializer_class = EventSerializer
+
+    def get_queryset(self):
+        return Event.objects.filter(choices__user=self.request.user,
+                                    date__gte=timezone.now(),
+                                    is_with_poll=True)
 
 
 class BookView(APIView):

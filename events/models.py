@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.db import models
 
 from applicants.models import Applicant
@@ -7,7 +8,6 @@ from events import constants
 
 
 class Event(models.Model):
-    # participants = models.ManyToManyField(Applicant, related_name='users_events')
     name = models.CharField(max_length=100)
     content = models.TextField(max_length=500)
     date = models.DateTimeField()
@@ -18,10 +18,22 @@ class Event(models.Model):
     def __str__(self):
         return '{}'.format(self.name)
 
+    @property
+    def get_time(self):
+        return self.date.time()
+
+    @property
+    def get_date(self):
+        return self.date.date()
+
+    @property
+    def get_choice(self):
+        return self.choices.first().choice
+
 
 class Choice(models.Model):
     event = models.ForeignKey(Event, related_name='choices', on_delete=models.CASCADE)
-    user = models.ForeignKey(Applicant, related_name='choices', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='choices', on_delete=models.CASCADE)
     choice = models.IntegerField(choices=constants.choices, default=constants.CONFUSED)
 
     class Meta:
@@ -40,14 +52,31 @@ class Room(models.Model):
 
 
 class Book(models.Model):
-    applicant = models.ForeignKey(Applicant, related_name='books', on_delete=models.CASCADE)
+    applicant = models.ForeignKey(User, related_name='books', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    date = models.DateTimeField(unique=True)
+    date_begin = models.DateTimeField()
+    date_end = models.DateTimeField()
     address = models.ForeignKey(Room, related_name='books', on_delete=models.CASCADE)
 
     def __str__(self):
         return "{}".format(self.name)
 
     class Meta:
-        ordering = ('date',)
-        get_latest_by = ('date',)
+        ordering = ('date_begin',)
+        get_latest_by = ('date_begin',)
+
+    @property
+    def get_date_begin(self):
+        return self.date_begin.date()
+
+    @property
+    def get_time_begin(self):
+        return self.date_begin.time()
+
+    @property
+    def get_date_end(self):
+        return self.date_end.date()
+
+    @property
+    def get_time_end(self):
+        return self.date_end.time()

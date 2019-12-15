@@ -35,12 +35,12 @@ class ApplicantAdmin(admin.ModelAdmin):
         event_id = request.POST.get('event')
         event = get_object_or_404(Event, id=event_id)
         for obj in queryset:
-            Choice.objects.get_or_create(user=obj, event=event)
+            Choice.objects.get_or_create(user=obj.user, event=event)
 
     send_event_notify.short_description = 'Send notify to event.'
 
     def get_user_events(self, obj):
-        q = obj.choices.exclude(choice=constants.REJECTED)
+        q = obj.user.choices.exclude(choice=constants.REJECTED)
         html = "<div class='collapsible'><p>{}</p><ul>".format(q.count())
         for li in q:
             html += get_event_change_page(li.event)

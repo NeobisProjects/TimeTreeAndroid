@@ -1,5 +1,7 @@
 .collapsible{
     margin: 0;
+    padding: 0;
+    width: 100%;
 }
 .collapsible ul{
     list-style: none;
@@ -8,6 +10,7 @@
     overflow: hidden;
     width: 100%;
     margin: 0;
+    padding: 0;
 }
 .collapsible ul li{
     display: block;
@@ -22,7 +25,7 @@
 .collapsible p{
     width: 100%;
     background: #ababab;
-    padding: 10px;
+    padding: 0;
     font-size: 1.5em;
     border: none;
     text-align: center;
