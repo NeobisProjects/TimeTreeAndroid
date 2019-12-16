@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from configs.constants import BAD_REQUEST_MESSAGE
-from events.models import Event, Room
+from events.models import Event, Room, Choice
 from events.serializers import EventSerializer, ChoiceSerializer, \
     RoomSerializer, CreateBookSerializer
 
@@ -55,7 +55,7 @@ class SetChoiceView(APIView):
         serializer = ChoiceSerializer(data=request.data)
         try:
             if serializer.is_valid(raise_exception=True):
-                serializer.save(user=request.user)
+                serializer.save(serializer.validated_data, request.user)
                 return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
             return Response(data={'message': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)

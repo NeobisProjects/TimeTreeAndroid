@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import now
 from rest_framework import serializers
 
@@ -41,6 +42,15 @@ class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
         fields = ('event', 'choice',)
+
+    def save(self, validated_data, user):
+        event = validated_data.get('event')
+        choice = validated_data.get('choice')
+        obj = Choice.objects.filter(event=event, user=user)
+        if obj.exists():
+            obj.update(choice=choice)
+        else:
+            raise ObjectDoesNotExist
 
 
 class EventSerializer(serializers.ModelSerializer):
