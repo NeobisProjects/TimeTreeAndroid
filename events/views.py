@@ -18,7 +18,8 @@ class EventView(generics.ListAPIView):
     serializer_class = EventSerializer
 
     def get_queryset(self):
-        return Event.objects.filter(choices__user=self.request.user, date__gte=timezone.now())
+        return Event.objects.filter(choices__user=self.request.user,
+                                    date__gte=timezone.now())
 
 
 class EventWithPollView(generics.ListAPIView):

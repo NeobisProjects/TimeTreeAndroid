@@ -16,7 +16,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('name', 'surname', 'email', 'password', 'password2', 'department')
 
     def create(self, validate_data):
-        print("First")
         password = validate_data.pop('password')
         instance = super(RegistrationSerializer, self).create(validate_data)
         user = User.objects.get(username=instance.email)
@@ -27,7 +26,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         email = attrs.get('email')
-        print(User.objects.filter(email=email), User.objects.filter(email=email).exists())
         if User.objects.filter(email=email).exists():
             raise CustomValidationError('User with this email already exists.')
         password = attrs.get('password')
@@ -36,7 +34,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             if password != password2:
                 raise CustomValidationError('Passwords must be similar!')
         return attrs
-
 
 
 class LoginSerializer(serializers.Serializer):

@@ -84,8 +84,7 @@ class RegistrationAPIView(APIView):
             print(e)
             return Response(data={"message": "User with this email already exists."}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(*e.args[0].values())
-            return Response(data={"message": e.args[0].values()}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAPIView(generics.CreateAPIView):
