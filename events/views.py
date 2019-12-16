@@ -52,7 +52,7 @@ class SetChoiceView(APIView):
     def post(self, request):
         serializer = ChoiceSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user.applicant)
+            serializer.save(user=request.user)
             return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
         return Response(data={'message': BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 

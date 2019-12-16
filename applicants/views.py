@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate, login
 # Create your views here.
+from django.db import IntegrityError
+from django.db.models import UniqueConstraint
 from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -74,10 +76,13 @@ class RegistrationAPIView(APIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=False):
+        try:
+            serializer.is_valid(raise_exception=False)
             serializer.save()
             return Response(data={"message": "Registration was successful!"}, status=status.HTTP_201_CREATED)
-        return Response(data={"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            return Response(data={"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAPIView(generics.CreateAPIView):
