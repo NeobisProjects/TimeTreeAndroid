@@ -57,7 +57,6 @@ class SetChoiceView(APIView):
                 serializer.save(user=request.user)
                 return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
-            print(e)
-            return Response(data={'message': e}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response(data={'message': e}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)

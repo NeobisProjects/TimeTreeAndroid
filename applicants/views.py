@@ -82,9 +82,10 @@ class RegistrationAPIView(APIView):
             return Response(data={"message": "Registration was successful!"}, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
             print(e)
-            return Response(data={"message": e}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "User with this email already exists."}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response(data={"message": e}, status=status.HTTP_400_BAD_REQUEST)
+            print(*e.args[0].values())
+            return Response(data={"message": e.args[0].values()}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAPIView(generics.CreateAPIView):

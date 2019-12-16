@@ -66,6 +66,7 @@ class EventAdmin(admin.ModelAdmin):
         return obj.is_with_poll
 
     get_is_with_poll.short_description = 'Is with poll'
+    get_is_with_poll.boolean = True
 
     list_display = ('name', 'date', 'get_is_with_poll',
                     'get_accepted_count',
