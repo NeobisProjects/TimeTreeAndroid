@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from applicants.errors import CustomValidationError
 from applicants.mailing import send_reset_password
 from applicants.models import Applicant
 from applicants.serializers import LoginSerializer, RegistrationSerializer, ChangePasswordSerializer, \
@@ -57,16 +58,26 @@ class LoginAPIView(APIView):
             return Response(data={"message": BAD_REQUEST_MESSAGE}, status=status.HTTP_404_NOT_FOUND)
 
 
-class RegistrationAPIView(generics.CreateAPIView):
-    serializer_class = RegistrationSerializer
-    queryset = Applicant.objects.all()
+# class RegistrationAPIView(generics.CreateAPIView):
+#     serializer_class = RegistrationSerializer
+#     queryset = Applicant.objects.all()
+#
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.serializer_class(data=request.data)
+#         if serializer.is_valid(raise_exception=True):
+#             serializer.save()
+#             return Response(data={"message": "Registration was successful!"}, status=status.HTTP_201_CREATED)
+#         return Response(data={"message": BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, *args, **kwargs):
+class RegistrationAPIView(APIView):
+    serializer_class = RegistrationSerializer
+
+    def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid(raise_exception=False):
             serializer.save()
             return Response(data={"message": "Registration was successful!"}, status=status.HTTP_201_CREATED)
-        return Response(data={"message": BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data={"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAPIView(generics.CreateAPIView):

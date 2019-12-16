@@ -50,7 +50,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('name', 'content', 'address',
+        fields = ('id', 'name', 'content', 'address',
                   'is_with_poll', 'deadline',
                   'date', 'time', 'choice')
 
