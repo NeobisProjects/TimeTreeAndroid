@@ -41,7 +41,7 @@ class BookView(APIView):
     def post(self, request):
         serializer = CreateBookSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(applicant=request.user.applicant)
+            serializer.save(applicant=request.user)
             return Response(data={'message': 'Successfully booked time.'}, status=status.HTTP_201_CREATED)
         return Response(data={'message': BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -55,25 +55,3 @@ class SetChoiceView(APIView):
             serializer.save(user=request.user)
             return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
         return Response(data={'message': BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
-
-# class GetUncertainUsersByEventId(APIView):
-#     permission_classes = (IsAuthenticated,)
-#
-#     def get(self, request):
-#         events = Event.objects.all()
-#         data = []
-#         for event in events:
-#             q = Choice.objects.exclude(event__in=events)
-#             data.append(q)
-#
-#         return Response(data=data, status=status.HTTP_200_OK)
-#
-#     def post(self, request):
-#         event_id = request.data.get('event_id')
-#         event = get_object_or_404(Event, id=event_id)
-#
-#         data = []
-#         if event:
-#             for choice in Choice.objects.filter(event_id=event_id).filter(choice=constants.CONFUSED):
-#                 data.append(ApplicantSerializer(choice.user).data)
-#         return Response(data=data, status=status.HTTP_200_OK)
