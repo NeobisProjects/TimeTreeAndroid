@@ -1,4 +1,5 @@
 # Create your views here.
+from django.db import IntegrityError
 from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
@@ -51,7 +52,12 @@ class SetChoiceView(APIView):
 
     def post(self, request):
         serializer = ChoiceSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user)
-            return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
-        return Response(data={'message': BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user=request.user)
+                return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
+        except IntegrityError as e:
+            print(e)
+            return Response(data={'message': e}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(data={'message': e}, status=status.HTTP_400_BAD_REQUEST)

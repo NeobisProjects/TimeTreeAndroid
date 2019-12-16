@@ -62,7 +62,12 @@ class EventAdmin(admin.ModelAdmin):
 
     get_confused_count.short_description = 'Confused'
 
-    list_display = ('name', 'date',
+    def get_is_with_poll(self, obj):
+        return obj.is_with_poll
+
+    get_is_with_poll.short_description = 'Is with poll'
+
+    list_display = ('name', 'date', 'get_is_with_poll',
                     'get_accepted_count',
                     'get_rejected_count',
                     'get_confused_count')

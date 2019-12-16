@@ -77,12 +77,14 @@ class RegistrationAPIView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         try:
-            serializer.is_valid(raise_exception=False)
+            serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(data={"message": "Registration was successful!"}, status=status.HTTP_201_CREATED)
-        except Exception as e:
+        except IntegrityError as e:
             print(e)
-            return Response(data={"message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": e}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(data={"message": e}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAPIView(generics.CreateAPIView):
