@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import re_path, include
-
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 api = [
     re_path(r'^applicants/', include('applicants.urls')),
     re_path(r'^values/', include('application_info.urls')),
     re_path(r'^events/', include('events.urls')),
     re_path(r'^rest_auth/', include('rest_auth.urls')),
+    re_path(r'^devices/', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_fcm_device'),
+
 ]
 
 urlpatterns = [

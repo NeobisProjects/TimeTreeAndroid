@@ -1,6 +1,7 @@
 # Create your views here.
 from django.db import IntegrityError
 from django.utils import timezone
+from fcm_django.models import FCMDevice
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
