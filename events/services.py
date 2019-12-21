@@ -9,7 +9,8 @@ class Notifier:
     @staticmethod
     def format_message(user, title, body):
         device = FCMDevice.objects.filter(user=user)
-        device.send_message(title=title, body=body)
+        if device.exists():
+            device.send_message(title=title, body=body)
 
     @staticmethod
     def notify_confused():
