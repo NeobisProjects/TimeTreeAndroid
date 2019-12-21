@@ -18,7 +18,7 @@ class Notifier:
         choices = Choice.objects.filter(choice=constants.CONFUSED)
         for choice in choices:
             try:
-                body = _('You didn\'t reply to this event: {}'.format(str(choice.event)))
+                body = _('You didn\'t reply to this event: ') + str(choice.event)
                 Notifier.format_message(choice.user, title, body)
             except:
                 pass

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-22 02:16+0600\n"
+"POT-Creation-Date: 2019-12-22 02:50+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,10 +135,8 @@ msgid "We have a problems."
 msgstr "У нас проблемы."
 
 #: .\application_info\apps.py:8
-#, fuzzy
-#| msgid "Applicant"
 msgid "Application info"
-msgstr "Пользователь"
+msgstr "Дополнительная информация"
 
 #: .\application_info\models.py:9
 msgid "Department"
@@ -192,9 +190,11 @@ msgstr "Пока нет брони для данной комнаты."
 msgid "Nearest book"
 msgstr "Ближайшая бронь"
 
-#: .\events\apps.py:8 .\events\models.py:18 .\events\models.py:38
-msgid "Event"
-msgstr "Мероприятие"
+#: .\events\apps.py:8 .\events\models.py:19
+#, fuzzy
+#| msgid "Event"
+msgid "Events"
+msgstr "Мероприятия"
 
 #: .\events\models.py:11
 msgid "Content"
@@ -212,10 +212,8 @@ msgstr "Адрес"
 msgid "Deadline"
 msgstr "Дедлайн опроса"
 
-#: .\events\models.py:19
-#, fuzzy
-#| msgid "Event"
-msgid "Events"
+#: .\events\models.py:18 .\events\models.py:38
+msgid "Event"
 msgstr "Мероприятие"
 
 #: .\events\models.py:45
@@ -250,14 +248,13 @@ msgstr "Бронь"
 msgid "Books"
 msgstr "Брони"
 
-#: .\events\services.py:16
+#: .\events\services.py:17
 msgid "Event created"
 msgstr "Добавлено мероприятие"
 
-#: .\events\services.py:19
-#, python-format
-msgid "You didn't reply to this event: %s"
-msgstr "Вы не прошли опрос для данного мероприятия: %s"
+#: .\events\services.py:21
+msgid "You didn't reply to this event: "
+msgstr "Вы не прошли опрос для данного мероприятия: "
 
 #: .\events\templates\choice_change_list.html:7
 msgid "Notify all confused"
