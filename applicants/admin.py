@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from applicants.forms import UpdateActionForm
 from applicants.models import Applicant
@@ -37,7 +37,7 @@ class ApplicantAdmin(admin.ModelAdmin):
         for obj in queryset:
             Choice.objects.get_or_create(user=obj.user, event=event)
 
-    send_event_notify.short_description = 'Send notify to event.'
+    send_event_notify.short_description = _('Send notify to event.')
 
     def get_user_events(self, obj):
         q = obj.user.choices.exclude(choice=constants.REJECTED)
@@ -47,7 +47,7 @@ class ApplicantAdmin(admin.ModelAdmin):
         html += "</ul></div>"
         return mark_safe(html)
 
-    get_user_events.short_description = 'User events'
+    get_user_events.short_description = _('User events')
 
     actions = ('send_event_notify',)
 

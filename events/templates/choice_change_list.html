@@ -4,7 +4,7 @@
 {% block object-tools %}
     <ul class="object-tools">
       {% block object-tools-items %}
-          <li><a href="{% url opts|admin_urlname:'notify' %}" class="button">{% trans "Notify" %}</a></li>
+          <li><a href="{% url opts|admin_urlname:'notify' %}" class="button">{% trans "Notify all confused" %}</a></li>
           {% change_list_object_tools %}
       {% endblock %}
     </ul>

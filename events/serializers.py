@@ -63,9 +63,3 @@ class EventSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'content', 'address',
                   'is_with_poll', 'deadline',
                   'date', 'time', 'choice')
-
-    # def get_choice(self, event):
-    #     choice = event.choices.filter(user=self.context['request'].user.applicant).first()
-    #     return choice.choice if hasattr(choice, 'choice') else constants.CONFUSED
-
-

@@ -8,9 +8,9 @@ from application_info.models import Department
 
 class Applicant(models.Model):
     user = models.OneToOneField(User, related_name='applicant', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, verbose_name=_('Name'))
+    surname = models.CharField(max_length=100, verbose_name=_('Surname'))
+    email = models.EmailField(max_length=100, unique=True, verbose_name=_('Email'))
     department = models.ForeignKey(Department,
                                    verbose_name=_('User\'s department'),
                                    related_name='users_department',
@@ -18,3 +18,7 @@ class Applicant(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.name, self.surname)
+
+    class Meta:
+        verbose_name = _('Applicant')
+        verbose_name_plural = _('Applicants')

@@ -1,14 +1,14 @@
 # Create your views here.
 from django.db import IntegrityError
 from django.utils import timezone
-from fcm_django.models import FCMDevice
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from configs.constants import BAD_REQUEST_MESSAGE
-from events.models import Event, Room, Choice
+from events.models import Event, Room
 from events.serializers import EventSerializer, ChoiceSerializer, \
     RoomSerializer, CreateBookSerializer
 
@@ -45,7 +45,7 @@ class BookView(APIView):
         serializer = CreateBookSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(applicant=request.user)
-            return Response(data={'message': 'Successfully booked time.'}, status=status.HTTP_201_CREATED)
+            return Response(data={'message': _('Successfully booked time.')}, status=status.HTTP_201_CREATED)
         return Response(data={'message': BAD_REQUEST_MESSAGE}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -57,7 +57,7 @@ class SetChoiceView(APIView):
         try:
             if serializer.is_valid(raise_exception=True):
                 serializer.save(serializer.validated_data, request.user)
-                return Response(data={'message': 'User choice is set.'}, status=status.HTTP_201_CREATED)
+                return Response(data={'message': _('User choice is set.')}, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
             return Response(data={'message': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

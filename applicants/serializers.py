@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from applicants.errors import CustomValidationError
@@ -25,14 +26,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return instance
 
     def validate(self, attrs):
-        email = attrs.get('email')
-        if User.objects.filter(email=email).exists():
-            raise CustomValidationError('User with this email already exists.')
         password = attrs.get('password')
         password2 = attrs.pop('password2')
         if password and password2:
             if password != password2:
-                raise CustomValidationError('Passwords must be similar!')
+                raise CustomValidationError(_('Passwords must be similar!'))
         return attrs
 
 
@@ -46,17 +44,17 @@ class LoginSerializer(serializers.Serializer):
         password = data.get('password', None)
 
         if email is None:
-            raise CustomValidationError('An email is required to log in.')
+            raise CustomValidationError(_('An email is required to log in.'))
         if password is None:
-            raise CustomValidationError('A password is required to log in.')
+            raise CustomValidationError(_('A password is required to log in.'))
 
         user = authenticate(username=email, password=password)
 
         if user is None:
-            raise CustomValidationError('A user with this email and password was not found.')
+            raise CustomValidationError(_('A user with this email and password was not found.'))
 
         if not user.is_active:
-            raise CustomValidationError('This user has been deactivated.')
+            raise CustomValidationError(_('This user has been deactivated.'))
         return data
 
 
@@ -79,17 +77,17 @@ class ChangePasswordSerializer(serializers.Serializer):
         new_password_check = data.get('new_password_check', None)
 
         if old_password is None:
-            raise CustomValidationError('An old password is required to change password.')
+            raise CustomValidationError(_('An old password is required to change password.'))
         if new_password is None:
-            raise CustomValidationError('A new password is required.')
+            raise CustomValidationError(_('A new password is required.'))
         if new_password_check is None:
-            raise CustomValidationError('Please confirm new password')
+            raise CustomValidationError(_('Please confirm new password'))
         if new_password != new_password_check:
-            raise CustomValidationError('Passwords must be similar.')
+            raise CustomValidationError(_('Passwords must be similar.'))
 
         user = authenticate(username=user.username, password=old_password)
         if user is None:
-            raise CustomValidationError('You input incorrect password. Please try again!')
+            raise CustomValidationError(_('You input incorrect password. Please try again!'))
 
         return data
 
@@ -100,10 +98,10 @@ class ResetPasswordSerializer(serializers.Serializer):
     def validate(self, attrs):
         email = attrs.get('email', None)
         if email is None:
-            raise CustomValidationError('Email address is required.')
+            raise CustomValidationError(_('Email address is required.'))
 
         user = User.objects.filter(username=email).first()
         if not user:
-            raise CustomValidationError('There is no user with this email.')
+            raise CustomValidationError(_('There is no user with this email.'))
 
         return attrs

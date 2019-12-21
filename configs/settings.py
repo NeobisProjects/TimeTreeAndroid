@@ -11,11 +11,14 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from decouple import config, Csv
+
 import django_heroku
+from decouple import config, Csv
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+from django.utils.translation import ugettext_lazy as _
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -27,7 +30,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -59,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 
 # Support for X-Request-ID
 
@@ -116,7 +117,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'configs.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -130,8 +130,6 @@ DATABASES = {
         'PORT': config('DB_PORT', default=''),
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -151,11 +149,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = config('LANGUAGE_CODE', default='en-us')
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = config('TIME_ZONE')
 
@@ -181,6 +179,11 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
+LANGUAGES = (
+    ('ru', _('Russian')),
+    ('en', _('English')),
+)
 
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
@@ -204,7 +207,6 @@ REST_FRAMEWORK = {
     ]
 }
 
-
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'applicants.serializers.LoginSerializer',
     # 'TOKEN_SERIALIZER': 'path.to.custom.TokenSerializer',
@@ -212,7 +214,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 FCM_DJANGO_SETTINGS = {
-        "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
+    "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
 }
 
 django_heroku.settings(locals())

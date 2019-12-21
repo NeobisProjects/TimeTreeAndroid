@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import re_path, include
+from django.utils.translation import ugettext_lazy as _
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 api = [
@@ -31,5 +32,5 @@ urlpatterns = [
     re_path(r'^api/', include(api))
 ]
 
-admin.site.site_title = 'TimeTreeAndroid Administration'
-admin.site.site_header = 'TimeTreeAndroid Administration'
+admin.site.site_title = _('NeobisTree Administration')
+admin.site.site_header = _('NeobisTree Administration')
