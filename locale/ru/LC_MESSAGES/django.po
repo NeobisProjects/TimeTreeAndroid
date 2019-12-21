@@ -191,8 +191,6 @@ msgid "Nearest book"
 msgstr "Ближайшая бронь"
 
 #: .\events\apps.py:8 .\events\models.py:19
-#, fuzzy
-#| msgid "Event"
 msgid "Events"
 msgstr "Мероприятия"
 
