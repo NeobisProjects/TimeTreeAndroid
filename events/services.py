@@ -17,8 +17,11 @@ class Notifier:
         title = _('Event created')
         choices = Choice.objects.filter(choice=constants.CONFUSED)
         for choice in choices:
-            body = _('You didn\'t reply to this event: {}'.format(str(choice.event)))
-            Notifier.format_message(choice.user, title, body)
+            try:
+                body = _('You didn\'t reply to this event: {}'.format(str(choice.event)))
+                Notifier.format_message(choice.user, title, body)
+            except:
+                pass
 
     @staticmethod
     def notify_event_created():
