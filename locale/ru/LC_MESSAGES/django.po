@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-22 02:50+0600\n"
+"POT-Creation-Date: 2019-12-22 12:15+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,11 +150,11 @@ msgstr "Департаменты"
 msgid "Something went wrong!"
 msgstr "Что-то пошло не так!"
 
-#: .\configs\settings.py:184
+#: .\configs\settings.py:183
 msgid "Russian"
 msgstr "Русский"
 
-#: .\configs\settings.py:185
+#: .\configs\settings.py:184
 msgid "English"
 msgstr "Английский"
 
@@ -251,7 +251,7 @@ msgid "Event created"
 msgstr "Добавлено мероприятие"
 
 #: .\events\services.py:21
-msgid "You didn't reply to this event: "
+msgid "Reply to this event: "
 msgstr "Вы не прошли опрос для данного мероприятия: "
 
 #: .\events\templates\choice_change_list.html:7
