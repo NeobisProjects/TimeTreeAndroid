@@ -11,7 +11,8 @@ class Notifier:
         device = FCMDevice.objects.filter(user=user)
         if device.exists():
             print(device, "exists")
-            device.send_message(title=title, body=body)
+            # device.send_message(title=title, body=body)
+            device.send_message("Hello", "Test")
             print(title, body)
 
     @staticmethod
