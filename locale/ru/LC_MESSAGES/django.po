@@ -172,7 +172,7 @@ msgstr "Отклонившие"
 
 #: .\events\admin.py:65 .\events\constants.py:8
 msgid "Confused"
-msgstr "Колеблющиеся"
+msgstr "Неопределенные"
 
 #: .\events\admin.py:70 .\events\models.py:14
 msgid "Is with poll"
@@ -256,7 +256,7 @@ msgstr "Вы не прошли опрос для данного мероприя
 
 #: .\events\templates\choice_change_list.html:7
 msgid "Notify all confused"
-msgstr "Уведомить всех колеблющиехся"
+msgstr "Уведомить всех неопределенных"
 
 #: .\events\views.py:48
 msgid "Successfully booked time."
