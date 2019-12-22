@@ -10,10 +10,7 @@ class Notifier:
     def format_message(user, title, body):
         device = FCMDevice.objects.filter(user=user)
         if device.exists():
-            print(device, "exists")
-            # device.send_message(title=title, body=body)
-            device.send_message("Hello", "Test")
-            print(title, body)
+            device.send_message(title, body)
 
     @staticmethod
     def notify_confused():
@@ -21,7 +18,7 @@ class Notifier:
         choices = Choice.objects.filter(choice=constants.CONFUSED)
         for choice in choices:
             try:
-                body = _('You didn\'t reply to this event: ') + str(choice.event)
+                body = _('Reply to this event: ') + str(choice.event)
                 Notifier.format_message(choice.user, title, body)
             except:
                 pass
