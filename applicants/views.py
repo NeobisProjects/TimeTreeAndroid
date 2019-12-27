@@ -64,9 +64,9 @@ class RegistrationAPIView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(data={"message": _("Registration was successful!")}, status=status.HTTP_201_CREATED)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(data={"message": _("Registration was successful!")}, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
             print(*["=" for _ in range(20)], sep="", end='\n')
             print(e)
