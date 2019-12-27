@@ -22,7 +22,7 @@ def send_greeting_mail(email):
 
 
 def send_reset_password(email):
-    user = User.objects.get(email=email)
+    user = User.objects.filter(email=email).first()
     password = User.objects.make_random_password(length=12)
     user.set_password(password)
     user.save()
