@@ -18,6 +18,7 @@ def create_applicant_with_user(sender, instance, **kwargs):
     print('Before user object create')
     user = User.objects.create_user(username=instance.email, email=instance.email)
     instance.user = user
+    instance.save()
     print('After user create')
     print(*["=" for _ in range(20)], sep="", end='\n')
 
