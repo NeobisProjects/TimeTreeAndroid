@@ -7,7 +7,7 @@ from events.models import Choice
 
 class Notifier:
     @staticmethod
-    def format_message(user, title, body):
+    def send_format_message(user, title, body):
         device = FCMDevice.objects.filter(user=user)
         if device.exists():
             device.send_message(str(title), str(body))
@@ -19,10 +19,10 @@ class Notifier:
         for choice in choices:
             try:
                 body = _('Reply to this event: ') + str(choice.event)
-                Notifier.format_message(choice.user, title, body)
+                Notifier.send_format_message(choice.user, title, body)
             except:
                 pass
 
     @staticmethod
-    def notify_event_created():
+    def notify_event_created(event):
         pass

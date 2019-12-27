@@ -68,7 +68,10 @@ class RegistrationAPIView(APIView):
             serializer.save()
             return Response(data={"message": _("Registration was successful!")}, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
+            print(*["=" for _ in range(20)], sep="", end='\n')
             print(e)
+            print(*["=" for _ in range(20)], sep="", end='\n')
+
             return Response(data={"message": _("User with this email already exists.")},
                             status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
