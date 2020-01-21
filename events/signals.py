@@ -8,5 +8,5 @@ from events.services import Notifier
 
 @receiver(post_save, sender=Event)
 def create_default_choices(sender, instance=None, created=False, **kwargs):
-    if created:
+    if created and not instance.is_with_poll:
         Notifier.notify_event_created(instance)
