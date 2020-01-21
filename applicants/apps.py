@@ -8,4 +8,4 @@ class ApplicantsConfig(AppConfig):
     verbose_name = _('Applicants')
 
     def ready(self):
-        pass
+        import applicants.signals

@@ -3,9 +3,10 @@ from django.dispatch import receiver
 
 from applicants.models import Applicant
 from events.models import Event, Choice
+from events.services import Notifier
 
 
 @receiver(post_save, sender=Event)
 def create_default_choices(sender, instance=None, created=False, **kwargs):
     if created:
-        pass
+        Notifier.notify_event_created(instance)

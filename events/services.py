@@ -8,13 +8,17 @@ from events.models import Choice
 class Notifier:
     @staticmethod
     def send_format_message(user, title, body):
-        device = FCMDevice.objects.filter(user=user)
+        if user is None:
+            device = FCMDevice.objects.all()
+        else:
+            device = FCMDevice.objects.filter(user=user)
+
         if device.exists():
             device.send_message(str(title), str(body))
 
     @staticmethod
     def notify_confused():
-        title = _('Event created')
+        title = _('Event poll')
         choices = Choice.objects.filter(choice=constants.CONFUSED)
         for choice in choices:
             try:
@@ -25,4 +29,9 @@ class Notifier:
 
     @staticmethod
     def notify_event_created(event):
-        pass
+        title = _('Event created')
+        try:
+            body = _('Event created: ') + str(event)
+            Notifier.send_format_message(None, title, body)
+        except:
+            pass
