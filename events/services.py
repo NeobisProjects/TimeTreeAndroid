@@ -32,6 +32,7 @@ class Notifier:
         title = _('Event created')
         try:
             body = _('Event created: ') + str(event)
+            print("++++++++++++++++++++", event, body)
             Notifier.send_format_message(None, title, body)
         except:
             pass
