@@ -20,12 +20,16 @@ class Notifier:
     def notify_confused():
         title = _('Event poll')
         choices = Choice.objects.filter(choice=constants.CONFUSED)
+        count = 0
         for choice in choices:
             try:
                 body = _('Reply to this event: ') + str(choice.event)
                 Notifier.send_format_message(choice.user, title, body)
+                count += 1
             except:
                 pass
+
+        return count
 
     @staticmethod
     def notify_event_created(event):
@@ -34,5 +38,12 @@ class Notifier:
             body = _('Event created: ') + str(event)
             print("++++++++++++++++++++", event, body)
             Notifier.send_format_message(None, title, body)
+        except:
+            pass
+
+    @staticmethod
+    def notify_user(user, title, body):
+        try:
+            Notifier.send_format_message(user, title, body)
         except:
             pass

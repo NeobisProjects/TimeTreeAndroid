@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
@@ -112,7 +112,13 @@ class ChoiceAdmin(admin.ModelAdmin, BaseMixin):
         return my_urls + urls
 
     def notify_confused(self, obj):
-        Notifier.notify_confused()
+        count = Notifier.notify_confused()
+        if count == 1:
+            messages.add_message(obj, messages.INFO, 'Notification sent to {} user.'.format(count))
+        elif count:
+            messages.add_message(obj, messages.INFO, 'Notification sent to {} users.'.format(count))
+        else:
+            messages.add_message(obj, messages.ERROR, 'Something wrong. Sorry.')
         return HttpResponseRedirect('../')
 
     list_display = ('user', 'event', 'formatted_choice',)

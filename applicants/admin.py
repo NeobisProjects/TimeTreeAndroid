@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 # Register your models here.
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -10,6 +10,7 @@ from applicants.forms import UpdateActionForm
 from applicants.models import Applicant
 from events import constants
 from events.models import Event, Choice
+from events.services import Notifier
 
 
 def get_event_change_page(event):
@@ -32,11 +33,17 @@ class ApplicantAdmin(admin.ModelAdmin):
 
     @transaction.atomic
     def send_event_notify(self, request, queryset):
-        event_id = request.POST.get('event')
-        event = get_object_or_404(Event, id=event_id)
+        event_id: int = request.POST.get('event')
+        event: Event = get_object_or_404(Event, id=event_id)
+        count = 0
         for obj in queryset:
             Choice.objects.get_or_create(user=obj.user, event=event)
-
+            try:
+                Notifier.notify_user(obj.user, "Event poll", "You invited to " + str(event))
+                count += 1
+            except:
+                pass
+        messages.add_message(request, messages.INFO, "Successfully invited {}/{}".format(count, len(queryset)))
     send_event_notify.short_description = _('Send notify to event.')
 
     def get_user_events(self, obj):
