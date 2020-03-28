@@ -56,7 +56,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     date = serializers.DateField(source='get_date')
     time = serializers.TimeField(source='get_time')
-    choice = serializers.IntegerField(source='get_choice')
+    choice = serializers.IntegerField(source='get_choice', allow_null=True)
 
     class Meta:
         model = Event

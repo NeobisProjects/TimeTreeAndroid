@@ -31,7 +31,9 @@ class Event(models.Model):
 
     @property
     def get_choice(self):
-        return self.choices.first().choice
+        if self.choices.exists():
+            return self.choices.first().choice
+        return None
 
 
 class Choice(models.Model):
