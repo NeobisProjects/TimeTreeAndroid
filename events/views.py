@@ -20,7 +20,8 @@ class EventView(generics.ListAPIView):
 
     def get_queryset(self):
         return Event.objects.filter(choices__user=self.request.user,
-                                    date__gte=timezone.now())
+                                    date__gte=timezone.now()) | \
+               Event.objects.filter(is_with_poll=False, date__gte=timezone.now())
 
 
 class EventWithPollView(generics.ListAPIView):
