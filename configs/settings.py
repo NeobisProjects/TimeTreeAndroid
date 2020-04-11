@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'fcm_django',
+    'corsheaders',
 
     'applicants.apps.ApplicantsConfig',
     'application_info.apps.ApplicationInfoConfig',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'log_request_id.middleware.RequestIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -181,6 +183,9 @@ REST_AUTH_SERIALIZERS = {
 FCM_DJANGO_SETTINGS = {
     "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
 }
+
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # SECURE_SSL_REDIRECT = True
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
