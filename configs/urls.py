@@ -14,22 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import re_path, include
+from django.urls import include, path
 from django.utils.translation import ugettext_lazy as _
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 api = [
-    re_path(r'^applicants/', include('applicants.urls')),
-    re_path(r'^values/', include('application_info.urls')),
-    re_path(r'^events/', include('events.urls')),
-    re_path(r'^rest_auth/', include('rest_auth.urls')),
-    re_path(r'^devices/', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_fcm_device'),
+    path('users/', include('users.urls')),
+    path('values/', include('application_info.urls')),
+    path('events/', include('events.urls')),
+    path('rest_auth/', include('rest_auth.urls')),
+    path('devices/', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_fcm_device'),
 
 ]
 
 urlpatterns = [
-    re_path(r'^admin/', admin.site.urls),
-    re_path(r'^api/', include(api))
+    path('jet/', include('jet.urls', 'jet')),
+    path('admin/', admin.site.urls),
+    path('api/', include(api))
 ]
 
 admin.site.site_title = _('NeobisTree Administration')

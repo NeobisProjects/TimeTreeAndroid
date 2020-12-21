@@ -1,6 +1,6 @@
 import factory
 
-from applicants.models import Applicant
+from users.models import Applicant
 from application_info.factories import DepartmentFactory
 
 

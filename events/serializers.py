@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from events import constants
 from events.models import Book, Event, Choice, Room
+from events.services import EventService
 
 
 class CreateBookSerializer(serializers.ModelSerializer):
@@ -38,19 +39,26 @@ class RoomSerializer(serializers.ModelSerializer):
         return BookSerializer(q, many=True).data
 
 
+class CreateRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('id', 'name', 'location')
+
+
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
         fields = ('event', 'choice',)
 
-    def save(self, validated_data, user):
+    def __init__(self, **kwargs):
+        if kwargs.get('user'):
+            self.user = kwargs.pop('user')
+        super().__init__(**kwargs)
+
+    def create(self, validated_data):
         event = validated_data.get('event')
         choice = validated_data.get('choice')
-        obj = Choice.objects.filter(event=event, user=user)
-        if obj.exists():
-            obj.update(choice=choice)
-        else:
-            raise ObjectDoesNotExist
+        return EventService.set_choice(self.user, event, choice)
 
 
 class EventSerializer(serializers.ModelSerializer):

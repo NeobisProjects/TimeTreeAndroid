@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from applicants.factories import ApplicantFactory
+from users.factories import ApplicantFactory
 
 
 class AuxiliaryTestCase(TestCase):

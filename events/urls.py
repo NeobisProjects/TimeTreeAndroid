@@ -1,11 +1,12 @@
-from django.urls import re_path
+from django.urls import path
 
 from events import views
 
 app_name = 'events'
 urlpatterns = [
-    re_path(r'^$', views.EventView.as_view(), name='event_list'),
-    re_path(r'^with_poll/$', views.EventWithPollView.as_view(), name='event_list_with_poll'),
-    re_path(r'^book/$', views.BookView.as_view(), name='book_room'),
-    re_path(r'^set_choice/$', views.SetChoiceView.as_view(), name='set_choice'),
+    path('', views.EventView.as_view(), name='event_list'),
+    path('with_poll/', views.EventWithPollView.as_view(), name='event_list_with_poll'),
+    path('book/', views.BookView.as_view(), name='book_room'),
+    path('set_choice/', views.SetChoiceView.as_view(), name='set_choice'),
+    path('rooms/', views.RoomsView.as_view(), name='rooms'),
 ]

@@ -6,8 +6,8 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from applicants.factories import ApplicantFactory
-from applicants.models import Applicant
+from users.factories import ApplicantFactory
+from users.models import Applicant
 from events import constants
 from events.factories import RoomFactory, EventFactory, ChoiceFactory
 from events.models import Choice, Event, Book, Room
@@ -24,25 +24,11 @@ class EventTest(TestCase):
         self.user.save()
         self.client.login(username="test@test.com", password="test_password")
 
-    def test_event_created(self):
-        self.second_applicant = ApplicantFactory(email='test@foo.bar')
-        self.data = {
-            "name": "Meetup",
-            "content": "Some text for test.",
-            "date": timezone.now(),
-            "deadline": timezone.now()-timezone.timedelta(days=10),
-            "address": "Unknown"
-        }
-
-        self.response = self.client.post(reverse('events:event_list'), self.data, format='json')
-
-        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(str(Event.objects.filter(name='Meetup')[0]), self.data.get('name'))
-
     def test_book_creation(self):
         self.data = {
             "address": self.room.id,
-            "date": timezone.now(),
+            "date_begin": timezone.now()+timezone.timedelta(days=1),
+            "date_end": timezone.now() + timezone.timedelta(days=5),
             "name": "Backend meetup",
         }
         self.book = self.client.post(reverse('events:book_room'), self.data, format='json')

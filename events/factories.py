@@ -1,7 +1,7 @@
 import factory
 from django.utils import timezone
 
-from applicants.factories import ApplicantFactory
+from users.factories import ApplicantFactory
 from events import constants
 from events.models import Event, Room, Choice
 

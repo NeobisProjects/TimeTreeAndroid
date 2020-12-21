@@ -1,11 +1,25 @@
+from smtplib import SMTPAuthenticationError
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from applicants.errors import CustomValidationError
-from applicants.mailing import send_greeting_mail
-from applicants.models import Applicant
+from users.errors import CustomValidationError
+from users.mailing import send_greeting_mail
+from users.models import Applicant
+
+
+class UserSerializer(serializers.ModelSerializer):
+    token = serializers.StringRelatedField(source='user.auth_token')
+    department = serializers.StringRelatedField()
+
+    class Meta:
+        model = Applicant
+        fields = (
+            'name', 'surname', 'email', 'token', 'department'
+        )
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -16,13 +30,18 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = Applicant
         fields = ('name', 'surname', 'email', 'password', 'password2', 'department')
 
+    @transaction.atomic
     def create(self, validate_data):
         password = validate_data.pop('password')
         instance = Applicant.objects.create(**validate_data)
         user = User.objects.filter(username=instance.email).first()
         user.set_password(password)
         user.save()
-        send_greeting_mail(instance.email)
+
+        try:
+            send_greeting_mail(instance.email)
+        except SMTPAuthenticationError:
+            pass
         return instance
 
     def validate(self, attrs):

@@ -16,7 +16,7 @@ def format_for_user(obj, choice_type):
     choices = obj.choices.filter(choice=choice_type)
     html = "<div class='collapsible'><p>{}</p><ul>".format(choices.count())
     for choice in choices:
-        link = reverse('admin:applicants_applicant_change', args=[choice.user.id])
+        link = reverse('admin:users_applicant_change', args=[choice.user.id])
         html += "<a href={}><li>{}</li></a>".format(link, choice.user)
     html += "</ul></div>"
     return mark_safe(html)
@@ -31,7 +31,7 @@ class BaseMixin:
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     def applicant_info(self, obj):
-        link = reverse('admin:applicants_applicant_change', args=[obj.applicant.id])
+        link = reverse('admin:users_applicant_change', args=[obj.applicant.id])
         return format_html('<a href="{}">{}</a>'.format(link, obj.applicant))
 
     applicant_info.short_description = _('Applicant')

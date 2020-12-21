@@ -4,8 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class ApplicantsConfig(AppConfig):
-    name = 'applicants'
+    name = 'users'
     verbose_name = _('Applicants')
 
     def ready(self):
-        import applicants.signals
+        import users.signals

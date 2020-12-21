@@ -36,7 +36,6 @@ class Notifier:
         title = _('Event created')
         try:
             body = _('Event created: ') + str(event)
-            print("++++++++++++++++++++", event, body)
             Notifier.send_format_message(None, title, body)
         except:
             pass
@@ -47,3 +46,15 @@ class Notifier:
             Notifier.send_format_message(user, title, body)
         except:
             pass
+
+
+class EventService:
+    @classmethod
+    def set_choice(cls, user, event, choice):
+        c = Choice.objects.filter(user=user, event=event).first()
+        if c:
+            c.choice = choice
+            c.save()
+            return c
+        else:
+            return Choice.objects.create(user=user, event=event, choice=choice)

@@ -3,13 +3,7 @@ from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
-from applicants.models import Applicant
-
-
-# @receiver(pre_save, sender=User)
-# def change_user_active(sender, instance, **kwargs):
-#     if instance._state.adding and not instance.is_superuser:
-#         instance.is_active = False
+from users.models import Applicant
 
 
 @receiver(pre_save, sender=Applicant)

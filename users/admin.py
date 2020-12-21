@@ -1,13 +1,15 @@
 from django.contrib import admin, messages
-# Register your models here.
+from django.contrib.auth.models import Group, User
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from fcm_django.models import FCMDevice
+from rest_framework.authtoken.models import Token
 
-from applicants.forms import UpdateActionForm
-from applicants.models import Applicant
+from users.forms import UpdateActionForm
+from users.models import Applicant
 from events import constants
 from events.models import Event, Choice
 from events.services import Notifier
@@ -26,7 +28,7 @@ class ApplicantAdmin(admin.ModelAdmin):
         }
         js = ('js/collapse.js',)
 
-    action_form = UpdateActionForm
+    # action_form = UpdateActionForm
     exclude = ('user',)
     list_display = ('__str__', 'email', 'department', 'get_user_events')
     list_filter = ('department__name',)
@@ -61,3 +63,9 @@ class ApplicantAdmin(admin.ModelAdmin):
     search_fields = ['name', ]
 
     change_list_template = 'applicant_change.html'
+
+
+admin.site.unregister(FCMDevice)
+admin.site.unregister(Token)
+admin.site.unregister(Group)
+# admin.site.unregister(User)
